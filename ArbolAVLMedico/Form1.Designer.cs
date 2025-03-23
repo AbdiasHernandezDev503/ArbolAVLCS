@@ -46,10 +46,9 @@
             // panelDibujo
             // 
             panelDibujo.BorderStyle = BorderStyle.FixedSingle;
-            panelDibujo.Location = new Point(10, 9);
-            panelDibujo.Margin = new Padding(3, 2, 3, 2);
+            panelDibujo.Location = new Point(11, 12);
             panelDibujo.Name = "panelDibujo";
-            panelDibujo.Size = new Size(856, 482);
+            panelDibujo.Size = new Size(978, 642);
             panelDibujo.TabIndex = 0;
             panelDibujo.Paint += panelDibujo_Paint;
             // 
@@ -66,41 +65,39 @@
             panel1.Controls.Add(lblNombre);
             panel1.Controls.Add(txtNombre);
             panel1.Controls.Add(lblDatos);
-            panel1.Location = new Point(970, 9);
-            panel1.Margin = new Padding(3, 2, 3, 2);
+            panel1.Location = new Point(1109, 12);
             panel1.Name = "panel1";
-            panel1.Size = new Size(361, 368);
+            panel1.Size = new Size(412, 489);
             panel1.TabIndex = 1;
             // 
             // btnAgregar
             // 
             btnAgregar.Font = new Font("Arial Narrow", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnAgregar.Location = new Point(22, 283);
-            btnAgregar.Margin = new Padding(3, 2, 3, 2);
+            btnAgregar.Location = new Point(25, 377);
             btnAgregar.Name = "btnAgregar";
-            btnAgregar.Size = new Size(323, 29);
+            btnAgregar.Size = new Size(369, 39);
             btnAgregar.TabIndex = 10;
             btnAgregar.Text = "Agregar";
             btnAgregar.UseVisualStyleBackColor = true;
+            btnAgregar.Click += btnAgregar_Click;
             // 
             // cbPresion
             // 
             cbPresion.DropDownStyle = ComboBoxStyle.DropDownList;
             cbPresion.FormattingEnabled = true;
             cbPresion.Items.AddRange(new object[] { "SELECCIONAR", "Alta", "Media", "Baja" });
-            cbPresion.Location = new Point(22, 246);
-            cbPresion.Margin = new Padding(3, 2, 3, 2);
+            cbPresion.Location = new Point(25, 328);
             cbPresion.Name = "cbPresion";
-            cbPresion.Size = new Size(323, 23);
+            cbPresion.Size = new Size(369, 28);
             cbPresion.TabIndex = 9;
             // 
             // lblPresion
             // 
             lblPresion.AutoSize = true;
             lblPresion.Font = new Font("Arial Narrow", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            lblPresion.Location = new Point(23, 226);
+            lblPresion.Location = new Point(26, 301);
             lblPresion.Name = "lblPresion";
-            lblPresion.Size = new Size(55, 20);
+            lblPresion.Size = new Size(64, 24);
             lblPresion.TabIndex = 8;
             lblPresion.Text = "Presión";
             // 
@@ -109,19 +106,18 @@
             cbTipoSangre.DropDownStyle = ComboBoxStyle.DropDownList;
             cbTipoSangre.FormattingEnabled = true;
             cbTipoSangre.Items.AddRange(new object[] { "SELECCIONAR", "A+", "A-", "O+", "O-", "AB+", "AB-" });
-            cbTipoSangre.Location = new Point(22, 194);
-            cbTipoSangre.Margin = new Padding(3, 2, 3, 2);
+            cbTipoSangre.Location = new Point(25, 259);
             cbTipoSangre.Name = "cbTipoSangre";
-            cbTipoSangre.Size = new Size(323, 23);
+            cbTipoSangre.Size = new Size(369, 28);
             cbTipoSangre.TabIndex = 7;
             // 
             // lblTipoSangre
             // 
             lblTipoSangre.AutoSize = true;
             lblTipoSangre.Font = new Font("Arial Narrow", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            lblTipoSangre.Location = new Point(22, 172);
+            lblTipoSangre.Location = new Point(25, 229);
             lblTipoSangre.Name = "lblTipoSangre";
-            lblTipoSangre.Size = new Size(100, 20);
+            lblTipoSangre.Size = new Size(118, 24);
             lblTipoSangre.TabIndex = 6;
             lblTipoSangre.Text = "Tipo de sangre";
             // 
@@ -131,10 +127,9 @@
             cbGenero.DropDownStyle = ComboBoxStyle.DropDownList;
             cbGenero.FormattingEnabled = true;
             cbGenero.Items.AddRange(new object[] { "SELECCIONAR", "FEMENINO", "MASCULINO" });
-            cbGenero.Location = new Point(22, 136);
-            cbGenero.Margin = new Padding(3, 2, 3, 2);
+            cbGenero.Location = new Point(25, 181);
             cbGenero.Name = "cbGenero";
-            cbGenero.Size = new Size(323, 23);
+            cbGenero.Size = new Size(369, 28);
             cbGenero.TabIndex = 5;
             // 
             // lblGenero
@@ -143,9 +138,9 @@
             lblGenero.Cursor = Cursors.IBeam;
             lblGenero.Font = new Font("Arial Narrow", 12F, FontStyle.Regular, GraphicsUnit.Point);
             lblGenero.ForeColor = Color.Black;
-            lblGenero.Location = new Point(22, 116);
+            lblGenero.Location = new Point(25, 155);
             lblGenero.Name = "lblGenero";
-            lblGenero.Size = new Size(54, 20);
+            lblGenero.Size = new Size(64, 24);
             lblGenero.TabIndex = 4;
             lblGenero.Text = "Género";
             // 
@@ -155,19 +150,18 @@
             lblNombre.BackColor = Color.Transparent;
             lblNombre.Cursor = Cursors.IBeam;
             lblNombre.Font = new Font("Arial Narrow", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            lblNombre.Location = new Point(22, 59);
+            lblNombre.Location = new Point(25, 79);
             lblNombre.Name = "lblNombre";
-            lblNombre.Size = new Size(135, 20);
+            lblNombre.Size = new Size(161, 24);
             lblNombre.TabIndex = 2;
             lblNombre.Text = "Nombre del paciente";
             lblNombre.Click += lblNombre_Click;
             // 
             // txtNombre
             // 
-            txtNombre.Location = new Point(22, 80);
-            txtNombre.Margin = new Padding(3, 2, 3, 2);
+            txtNombre.Location = new Point(25, 107);
             txtNombre.Name = "txtNombre";
-            txtNombre.Size = new Size(323, 23);
+            txtNombre.Size = new Size(369, 27);
             txtNombre.TabIndex = 1;
             txtNombre.Enter += txtNombre_Enter;
             txtNombre.Leave += txtNombre_Leave;
@@ -176,20 +170,19 @@
             // 
             lblDatos.AutoSize = true;
             lblDatos.Font = new Font("Arial Black", 13.8F, FontStyle.Bold, GraphicsUnit.Point);
-            lblDatos.Location = new Point(22, 11);
+            lblDatos.Location = new Point(25, 15);
             lblDatos.Name = "lblDatos";
-            lblDatos.Size = new Size(209, 27);
+            lblDatos.Size = new Size(248, 32);
             lblDatos.TabIndex = 0;
             lblDatos.Text = "Datos del paciente";
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1340, 530);
+            ClientSize = new Size(1531, 707);
             Controls.Add(panel1);
             Controls.Add(panelDibujo);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "Form1";
             Text = "Form1";
             panel1.ResumeLayout(false);
