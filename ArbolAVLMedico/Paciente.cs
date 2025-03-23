@@ -8,6 +8,7 @@ public class Paciente
     public string TipoSangre { get; set; }
     public string Presion { get; set; }
 
+    public Paciente() { }
 
     public Paciente(string nombre, string genero, string tipoSangre, string presion) 
     {

@@ -3,10 +3,11 @@ namespace ArbolAVLMedico
     public partial class Form1 : Form
     {
         private ArbolPaciente arbol;
-        Dictionary<NodoPaciente, Point> posiciones = new Dictionary<NodoPaciente, Point>();
-        int nextX = 40;  // Posición X inicial para ir colocando nodos
-        int espacioHorizontal = 100;
-        int espacioVertical = 60;
+        private Dictionary<NodoPaciente, Point> posiciones = new Dictionary<NodoPaciente, Point>();
+        private int nextX = 40;
+        private int espacioHorizontal = 100;
+        private int espacioVertical = 60;
+
 
         public Form1()
         {
@@ -14,7 +15,8 @@ namespace ArbolAVLMedico
 
             arbol = new ArbolPaciente();
             this.DoubleBuffered = true; // Suaviza el renderizado
-            this.Paint += panelDibujo_Paint;
+            this.panelDibujo.Paint += panelDibujo_Paint;
+
 
             lblNombre.Font = new Font("Arial", 12);
             lblGenero.Font = new Font("Arial", 12);
@@ -68,22 +70,26 @@ namespace ArbolAVLMedico
         {
             string nombre = txtNombre.Text.Trim();
             string genero = cbGenero.SelectedItem?.ToString();
-            string tipoSangre = cbTipoSangre.SelectedItem?.ToString();
+            string sangre = cbTipoSangre.SelectedItem?.ToString();
             string presion = cbPresion.SelectedItem?.ToString();
 
-            if (string.IsNullOrEmpty(nombre) || genero == null || tipoSangre == null || presion == null)
+            if (string.IsNullOrWhiteSpace(nombre) || genero == null || sangre == null || presion == null)
             {
-                MessageBox.Show("Complete todos los campos.");
+                MessageBox.Show("Por favor complete todos los campos.");
                 return;
             }
 
-            Paciente paciente = new Paciente(nombre, genero, tipoSangre, presion);
-            arbol.AgregarPaciente(paciente);
+            // Agrega el paciente al árbol dinámicamente
+            AgregarPacienteDesdeFormulario(genero, sangre, presion, nombre);
 
-            panelDibujo.Invalidate(); // Esto fuerza el evento Paint
+            // Limpiar campos opcionalmente
+            txtNombre.Clear();
+            cbGenero.SelectedIndex = -1;
+            cbTipoSangre.SelectedIndex = -1;
+            cbPresion.SelectedIndex = -1;
         }
 
-        void CalcularPosiciones(NodoPaciente nodo, int nivel)
+        private void CalcularPosiciones(NodoPaciente nodo, int nivel)
         {
             int y = nivel * espacioVertical;
 
@@ -99,7 +105,6 @@ namespace ArbolAVLMedico
                     CalcularPosiciones(hijo, nivel + 1);
                 }
 
-                // Centrar nodo padre entre el primero y último hijo
                 int xInicio = posiciones[nodo.Hijos.First()].X;
                 int xFin = posiciones[nodo.Hijos.Last()].X;
                 int xCentro = (xInicio + xFin) / 2;
@@ -107,7 +112,7 @@ namespace ArbolAVLMedico
             }
         }
 
-        void DibujarArbol(Graphics g, NodoPaciente nodo)
+        private void DibujarArbol(Graphics g, NodoPaciente nodo)
         {
             Font font = new Font("Arial", 9);
             Point punto = posiciones[nodo];
@@ -129,14 +134,16 @@ namespace ArbolAVLMedico
             }
         }
 
-
-        private void DibujarNodo(Graphics g, NodoPaciente nodo, Font font, int x, int y)
+        private void AgregarPacienteDesdeFormulario(string genero, string sangre, string presion, string nombre)
         {
-            SizeF size = g.MeasureString(nodo.Categoria, font);
-            Rectangle rect = new Rectangle(x, y, 60, 25);
-            g.FillEllipse(Brushes.White, rect);
-            g.DrawEllipse(Pens.Black, rect);
-            g.DrawString(nodo.Categoria, font, Brushes.Black, x + 5, y + 5);
+            Paciente paciente = new Paciente();
+            paciente.Nombre = nombre;
+            paciente.Genero = genero;
+            paciente.TipoSangre = sangre;
+            paciente.Presion = presion;
+
+            arbol.AgregarPaciente(paciente);
+            panelDibujo.Invalidate(); // Vuelve a pintar el formulario
         }
     }
 }
