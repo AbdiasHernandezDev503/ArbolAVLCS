@@ -36,5 +36,20 @@ public class NodoPaciente
         return false;
     }
 
+    public NodoPaciente BuscarPaciente(string nombre)
+    {
+        if (this.Categoria.Equals(nombre, StringComparison.OrdinalIgnoreCase))
+            return this;
+
+        foreach (var hijo in Hijos)
+        {
+            var encontrado = hijo.BuscarPaciente(nombre);
+            if (encontrado != null)
+                return encontrado;
+        }
+
+        return null;
+    }
+
 
 }

@@ -9,6 +9,7 @@ namespace ArbolAVLMedico
         private int espacioVertical = 60;
         int nivelMax = 0;
         private Point posicionRaiz;
+        private List<NodoPaciente> nodosResaltados = new List<NodoPaciente>();
 
         public Form1()
         {
@@ -31,7 +32,6 @@ namespace ArbolAVLMedico
 
         private void DibujarArbolEnImagen()
         {
-            // Calcular las posiciones primero para determinar el tamaño
             posiciones.Clear();
             nextX = 40;
             nivelMax = 0;
@@ -50,7 +50,6 @@ namespace ArbolAVLMedico
             pbArbol.Image = bmp;
             pbArbol.Size = bmp.Size;
 
-            // Mueve el scroll hacia la raíz después de dibujar
             panelContenedor.ScrollControlIntoView(pbArbol);
             panelContenedor.AutoScrollPosition = new Point(
                 Math.Max(0, posicionRaiz.X - panelContenedor.Width / 2),
@@ -93,7 +92,6 @@ namespace ArbolAVLMedico
                 return;
             }
 
-            // Agrega el paciente al árbol dinámicamente
             AgregarPacienteDesdeFormulario(genero, sangre, presion, nombre);
 
             txtNombre.Clear();
@@ -102,9 +100,45 @@ namespace ArbolAVLMedico
             cbPresion.SelectedIndex = -1;
         }
 
-        // Método para calcular la posición de los nodos
+        private void btnBuscar_Click(object sender, EventArgs e)
+        {
+            string nombreBuscar = txtNombre.Text.Trim();
+            if (string.IsNullOrEmpty(nombreBuscar))
+            {
+                MessageBox.Show("Ingrese un nombre para buscar.");
+                return;
+            }
+
+            nodosResaltados.Clear();
+            BuscarTodosLosPacientes(arbol.Raiz, nombreBuscar);
+
+            if (nodosResaltados.Count == 0)
+            {
+                MessageBox.Show("Paciente no encontrado.");
+            }
+
+            DibujarArbolEnImagen();
+        }
+
+        private void BuscarTodosLosPacientes(NodoPaciente nodo, string nombre)
+        {
+            if (nodo == null) return;
+
+            if (nodo.Categoria.Equals(nombre, StringComparison.OrdinalIgnoreCase))
+            {
+                nodosResaltados.Add(nodo);
+            }
+
+            foreach (var hijo in nodo.Hijos)
+            {
+                BuscarTodosLosPacientes(hijo, nombre);
+            }
+        }
+
         private void CalcularPosiciones(NodoPaciente nodo, int nivel)
         {
+            if (nodo == null) return;
+
             nivelMax = Math.Max(nivelMax, nivel);
             int y = nivel * espacioVertical;
 
@@ -135,14 +169,25 @@ namespace ArbolAVLMedico
 
         private void DibujarArbol(Graphics g, NodoPaciente nodo)
         {
+            if (nodo == null) return;
+
             Font font = new Font("Arial", 9);
             Point punto = posiciones[nodo];
 
             SizeF size = g.MeasureString(nodo.Categoria, font);
             Rectangle rect = new Rectangle(punto.X, punto.Y, (int)size.Width + 10, 25);
 
-            g.FillEllipse(Brushes.White, rect);
-            g.DrawEllipse(Pens.Black, rect);
+            Brush fondo = Brushes.White;
+            Pen borde = Pens.Black;
+
+            if (nodosResaltados.Contains(nodo))
+            {
+                fondo = Brushes.Yellow;
+                borde = Pens.Red;
+            }
+
+            g.FillEllipse(fondo, rect);
+            g.DrawEllipse(borde, rect);
             g.DrawString(nodo.Categoria, font, Brushes.Black, rect.X + 5, rect.Y + 5);
 
             foreach (var hijo in nodo.Hijos)
@@ -157,18 +202,19 @@ namespace ArbolAVLMedico
 
         private void AgregarPacienteDesdeFormulario(string genero, string sangre, string presion, string nombre)
         {
-            // Validar si el paciente ya existe en el árbol
             if (arbol.Raiz.ExistePaciente(nombre))
             {
                 MessageBox.Show("Ese paciente ya ha sido registrado.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            Paciente paciente = new Paciente();
-            paciente.Nombre = nombre;
-            paciente.Genero = genero;
-            paciente.TipoSangre = sangre;
-            paciente.Presion = presion;
+            Paciente paciente = new Paciente
+            {
+                Nombre = nombre,
+                Genero = genero,
+                TipoSangre = sangre,
+                Presion = presion
+            };
 
             arbol.AgregarPaciente(paciente);
             DibujarArbolEnImagen();

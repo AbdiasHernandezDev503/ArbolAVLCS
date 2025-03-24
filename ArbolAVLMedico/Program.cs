@@ -13,22 +13,22 @@ namespace ArbolAVLMedico
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            Application.Run(new Form1());
+            //Application.Run(new Form1());
 
             // Mostrar el formulario de login
-            //LoginForm loginForm = new LoginForm();
-            //loginForm.ShowDialog();
+            LoginForm loginForm = new LoginForm();
+            loginForm.ShowDialog();
 
-            //// Si el login fue exitoso, lanza la app principal
-            //if (loginForm.Autenticado)
-            //{
-            //    Application.Run(new Form1());
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Acceso denegado. La aplicación se cerrará.");
-            //    Application.Exit();
-            //}
+            // Si el login fue exitoso, lanza la app principal
+            if (loginForm.Autenticado)
+            {
+                Application.Run(new Form1());
+            }
+            else
+            {
+                MessageBox.Show("Acceso denegado. La aplicación se cerrará.");
+               Application.Exit();
+            }
         }
     }
 }
