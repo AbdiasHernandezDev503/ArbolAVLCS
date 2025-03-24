@@ -200,7 +200,6 @@ namespace ArbolAVLMedico
             {
                 Point hijoPunto = posiciones[hijo];
 
-                // Centro inferior del nodo padre
                 int padreX = punto.X + rect.Width / 2;
                 int padreY = punto.Y + rect.Height;
 
@@ -215,26 +214,6 @@ namespace ArbolAVLMedico
 
                 DibujarArbol(g, hijo);
             }
-        }
-
-        private void AgregarPacienteDesdeFormulario(string genero, string sangre, string presion, string nombre)
-        {
-            if (arbol.Raiz.ExistePaciente(nombre))
-            {
-                MessageBox.Show("Ese paciente ya ha sido registrado.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            Paciente paciente = new Paciente
-            {
-                Nombre = nombre,
-                Genero = genero,
-                TipoSangre = sangre,
-                Presion = presion
-            };
-
-            arbol.AgregarPaciente(paciente);
-            DibujarArbolEnImagen();
         }
     }
 }
