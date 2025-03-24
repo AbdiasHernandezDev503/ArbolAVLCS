@@ -31,67 +31,73 @@
             txtUsuario = new TextBox();
             txtContraseña = new TextBox();
             btnLogin = new Button();
-            label1 = new Label();
-            label2 = new Label();
+            lblUsuario = new Label();
+            lblContraseña = new Label();
             SuspendLayout();
             // 
             // txtUsuario
             // 
+            txtUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             txtUsuario.Location = new Point(182, 52);
             txtUsuario.Name = "txtUsuario";
-            txtUsuario.Size = new Size(131, 23);
+            txtUsuario.Size = new Size(131, 27);
             txtUsuario.TabIndex = 0;
             // 
             // txtContraseña
             // 
+            txtContraseña.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             txtContraseña.Location = new Point(182, 113);
             txtContraseña.Name = "txtContraseña";
-            txtContraseña.Size = new Size(131, 23);
+            txtContraseña.Size = new Size(131, 27);
             txtContraseña.TabIndex = 1;
             txtContraseña.UseSystemPasswordChar = true;
             // 
             // btnLogin
             // 
-            btnLogin.Location = new Point(204, 170);
+            btnLogin.BackColor = SystemColors.Menu;
+            btnLogin.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnLogin.ForeColor = SystemColors.ControlText;
+            btnLogin.Location = new Point(202, 167);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(75, 23);
+            btnLogin.Size = new Size(80, 29);
             btnLogin.TabIndex = 2;
             btnLogin.Text = "Login";
-            btnLogin.UseVisualStyleBackColor = true;
+            btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
             // 
-            // label1
+            // lblUsuario
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            label1.Location = new Point(61, 53);
-            label1.Name = "label1";
-            label1.Size = new Size(55, 17);
-            label1.TabIndex = 3;
-            label1.Text = "Usuario";
+            lblUsuario.AutoSize = true;
+            lblUsuario.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            lblUsuario.Location = new Point(61, 53);
+            lblUsuario.Name = "lblUsuario";
+            lblUsuario.Size = new Size(63, 20);
+            lblUsuario.TabIndex = 3;
+            lblUsuario.Text = "Usuario";
             // 
-            // label2
+            // lblContraseña
             // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI Semibold", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.Location = new Point(61, 114);
-            label2.Name = "label2";
-            label2.Size = new Size(77, 17);
-            label2.TabIndex = 4;
-            label2.Text = "Contraseña";
+            lblContraseña.AutoSize = true;
+            lblContraseña.Font = new Font("Segoe UI", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            lblContraseña.Location = new Point(61, 114);
+            lblContraseña.Name = "lblContraseña";
+            lblContraseña.Size = new Size(88, 20);
+            lblContraseña.TabIndex = 4;
+            lblContraseña.Text = "Contraseña";
             // 
             // LoginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.InactiveCaption;
             ClientSize = new Size(385, 231);
-            Controls.Add(label2);
-            Controls.Add(label1);
+            Controls.Add(lblContraseña);
+            Controls.Add(lblUsuario);
             Controls.Add(btnLogin);
             Controls.Add(txtContraseña);
             Controls.Add(txtUsuario);
             Name = "LoginForm";
-            Text = "LoginForm";
+            Text = "Login";
             Load += LoginForm_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -102,7 +108,7 @@
         private TextBox txtUsuario;
         private TextBox txtContraseña;
         private Button btnLogin;
-        private Label label1;
-        private Label label2;
+        private Label lblUsuario;
+        private Label lblContraseña;
     }
 }

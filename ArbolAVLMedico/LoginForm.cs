@@ -13,21 +13,21 @@ namespace ArbolAVLMedico
     public partial class LoginForm : Form
     {
         private Usuario usuarioValido;
-
         public bool Autenticado { get; set; }
 
         public LoginForm()
         {
             InitializeComponent();
+            //Permite dar enter después de escribir las credenciales
+            this.AcceptButton = btnLogin;
 
-            //Crear un usuario por defecto
+            //Usuario por defecto
             usuarioValido = new Usuario("admin", "1234");
             Autenticado = false;
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
-        {
-            // Puedes dejarlo vacío o poner un mensaje de bienvenida si quieres.
+        {       
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -38,7 +38,7 @@ namespace ArbolAVLMedico
             if (usuarioValido.ValidarCredenciales(usuario, contraseña))
             {
                 Autenticado = true;
-                this.Close(); // Cerrar el login y continuar
+                this.Close(); // Cierra el login y continua
             }
             else
             {
