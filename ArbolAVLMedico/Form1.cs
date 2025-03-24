@@ -73,7 +73,6 @@ namespace ArbolAVLMedico
                 lblNombre.ForeColor = Color.Gray;
                 lblNombre.BackColor = Color.Transparent;
             }
-
         }
 
         private void lblNombre_Click(object sender, EventArgs e)
@@ -97,7 +96,6 @@ namespace ArbolAVLMedico
             // Agrega el paciente al árbol dinámicamente
             AgregarPacienteDesdeFormulario(genero, sangre, presion, nombre);
 
-            // Limpiar campos opcionalmente
             txtNombre.Clear();
             cbGenero.SelectedIndex = -1;
             cbTipoSangre.SelectedIndex = -1;
