@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panelDibujo = new Panel();
+            panelContenedor = new Panel();
             panel1 = new Panel();
             btnAgregar = new Button();
             cbPresion = new ComboBox();
@@ -43,14 +43,15 @@
             panel1.SuspendLayout();
             SuspendLayout();
             // 
-            // panelDibujo
+            // panelContenedor
             // 
-            panelDibujo.BorderStyle = BorderStyle.FixedSingle;
-            panelDibujo.Location = new Point(11, 12);
-            panelDibujo.Name = "panelDibujo";
-            panelDibujo.Size = new Size(978, 642);
-            panelDibujo.TabIndex = 0;
-            panelDibujo.Paint += panelDibujo_Paint;
+            panelContenedor.AutoScroll = true;
+            panelContenedor.BorderStyle = BorderStyle.FixedSingle;
+            panelContenedor.Location = new Point(11, 12);
+            panelContenedor.Name = "panelContenedor";
+            panelContenedor.Size = new Size(978, 642);
+            panelContenedor.TabIndex = 0;
+            panelContenedor.Paint += panelDibujo_Paint;
             // 
             // panel1
             // 
@@ -182,7 +183,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1531, 707);
             Controls.Add(panel1);
-            Controls.Add(panelDibujo);
+            Controls.Add(panelContenedor);
             Name = "Form1";
             Text = "Form1";
             panel1.ResumeLayout(false);
@@ -192,7 +193,7 @@
 
         #endregion
 
-        private Panel panelDibujo;
+        private Panel panelContenedor;
         private Panel panel1;
         private Label lblNombre;
         private TextBox txtNombre;

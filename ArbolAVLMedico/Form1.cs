@@ -7,7 +7,8 @@ namespace ArbolAVLMedico
         private int nextX = 40;
         private int espacioHorizontal = 100;
         private int espacioVertical = 60;
-
+        int nivelMax = 0;
+        private Point posicionRaiz;
 
         public Form1()
         {
@@ -15,8 +16,15 @@ namespace ArbolAVLMedico
 
             arbol = new ArbolPaciente();
             this.DoubleBuffered = true; // Suaviza el renderizado
-            this.panelDibujo.Paint += panelDibujo_Paint;
+            this.panelContenedor.Paint += panelDibujo_Paint;
 
+            panelContenedor.GetType().GetProperty("DoubleBuffered", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(panelContenedor, true, null);
+
+            typeof(Panel).InvokeMember("DoubleBuffered",
+            System.Reflection.BindingFlags.SetProperty |
+            System.Reflection.BindingFlags.Instance |
+            System.Reflection.BindingFlags.NonPublic,
+            null, panelContenedor, new object[] { true });
 
             lblNombre.Font = new Font("Arial", 12);
             lblGenero.Font = new Font("Arial", 12);
@@ -33,12 +41,24 @@ namespace ArbolAVLMedico
 
         private void panelDibujo_Paint(object sender, PaintEventArgs e)
         {
+            e.Graphics.Clear(panelContenedor.BackColor);
+
             if (arbol?.Raiz != null)
             {
                 posiciones.Clear();
                 nextX = 40;
+                nivelMax = 0;
 
                 CalcularPosiciones(arbol.Raiz, 0);
+
+                int alturaTotal = (nivelMax + 1) * espacioVertical;
+                panelContenedor.AutoScrollMinSize = new Size(nextX + 100, alturaTotal + 100);
+
+                e.Graphics.TranslateTransform(
+                    panelContenedor.AutoScrollPosition.X,
+                    panelContenedor.AutoScrollPosition.Y
+                );
+
                 DibujarArbol(e.Graphics, arbol.Raiz);
             }
         }
@@ -91,12 +111,16 @@ namespace ArbolAVLMedico
 
         private void CalcularPosiciones(NodoPaciente nodo, int nivel)
         {
+            nivelMax = Math.Max(nivelMax, nivel);
             int y = nivel * espacioVertical;
 
             if (nodo.Hijos.Count == 0)
             {
                 posiciones[nodo] = new Point(nextX, y);
                 nextX += espacioHorizontal;
+
+                if (nivel == 0)
+                    posicionRaiz = posiciones[nodo];
             }
             else
             {
@@ -109,6 +133,9 @@ namespace ArbolAVLMedico
                 int xFin = posiciones[nodo.Hijos.Last()].X;
                 int xCentro = (xInicio + xFin) / 2;
                 posiciones[nodo] = new Point(xCentro, y);
+
+                if (nivel == 0)
+                    posicionRaiz = posiciones[nodo];
             }
         }
 
@@ -143,7 +170,7 @@ namespace ArbolAVLMedico
             paciente.Presion = presion;
 
             arbol.AgregarPaciente(paciente);
-            panelDibujo.Invalidate(); // Vuelve a pintar el formulario
+            panelContenedor.Invalidate(); // Vuelve a pintar el formulario
         }
     }
 }
