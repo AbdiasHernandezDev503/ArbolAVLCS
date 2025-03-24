@@ -19,13 +19,13 @@ namespace ArbolAVLMedico
         {
             InitializeComponent();
 
-            //Crear un usuario por defecto
+            //Usuario por defecto
             usuarioValido = new Usuario("admin", "1234");
             Autenticado = false;
         }
 
         private void LoginForm_Load(object sender, EventArgs e)
-        {
+        {       
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
@@ -36,7 +36,7 @@ namespace ArbolAVLMedico
             if (usuarioValido.ValidarCredenciales(usuario, contraseña))
             {
                 Autenticado = true;
-                this.Close(); // Cerrar el login y continuar
+                this.Close(); // Cierra el login y continua
             }
             else
             {
