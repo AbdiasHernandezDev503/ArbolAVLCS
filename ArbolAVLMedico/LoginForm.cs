@@ -18,6 +18,8 @@ namespace ArbolAVLMedico
         public LoginForm()
         {
             InitializeComponent();
+            //Permite dar enter después de escribir las credenciales
+            this.AcceptButton = btnLogin;
 
             //Usuario por defecto
             usuarioValido = new Usuario("admin", "1234");

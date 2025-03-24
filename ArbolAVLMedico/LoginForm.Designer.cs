@@ -37,28 +37,32 @@
             // 
             // txtUsuario
             // 
+            txtUsuario.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             txtUsuario.Location = new Point(182, 52);
             txtUsuario.Name = "txtUsuario";
-            txtUsuario.Size = new Size(131, 23);
+            txtUsuario.Size = new Size(131, 27);
             txtUsuario.TabIndex = 0;
             // 
             // txtContraseña
             // 
+            txtContraseña.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             txtContraseña.Location = new Point(182, 113);
             txtContraseña.Name = "txtContraseña";
-            txtContraseña.Size = new Size(131, 23);
+            txtContraseña.Size = new Size(131, 27);
             txtContraseña.TabIndex = 1;
             txtContraseña.UseSystemPasswordChar = true;
             // 
             // btnLogin
             // 
+            btnLogin.BackColor = SystemColors.Menu;
             btnLogin.Font = new Font("Segoe UI Semibold", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
+            btnLogin.ForeColor = SystemColors.ControlText;
             btnLogin.Location = new Point(202, 167);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(80, 29);
             btnLogin.TabIndex = 2;
             btnLogin.Text = "Login";
-            btnLogin.UseVisualStyleBackColor = true;
+            btnLogin.UseVisualStyleBackColor = false;
             btnLogin.Click += btnLogin_Click;
             // 
             // lblUsuario
@@ -85,6 +89,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.InactiveCaption;
             ClientSize = new Size(385, 231);
             Controls.Add(lblContraseña);
             Controls.Add(lblUsuario);
