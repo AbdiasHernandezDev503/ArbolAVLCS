@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             panelContenedor = new Panel();
+            pbArbol = new PictureBox();
             panel1 = new Panel();
             btnAgregar = new Button();
             cbPresion = new ComboBox();
@@ -40,6 +41,8 @@
             lblNombre = new Label();
             txtNombre = new TextBox();
             lblDatos = new Label();
+            panelContenedor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbArbol).BeginInit();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -47,11 +50,19 @@
             // 
             panelContenedor.AutoScroll = true;
             panelContenedor.BorderStyle = BorderStyle.FixedSingle;
+            panelContenedor.Controls.Add(pbArbol);
             panelContenedor.Location = new Point(11, 12);
             panelContenedor.Name = "panelContenedor";
-            panelContenedor.Size = new Size(978, 642);
+            panelContenedor.Size = new Size(1081, 683);
             panelContenedor.TabIndex = 0;
-            panelContenedor.Paint += panelDibujo_Paint;
+            // 
+            // pbArbol
+            // 
+            pbArbol.Location = new Point(0, -1);
+            pbArbol.Name = "pbArbol";
+            pbArbol.Size = new Size(1076, 657);
+            pbArbol.TabIndex = 0;
+            pbArbol.TabStop = false;
             // 
             // panel1
             // 
@@ -186,6 +197,8 @@
             Controls.Add(panelContenedor);
             Name = "Form1";
             Text = "Form1";
+            panelContenedor.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pbArbol).EndInit();
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ResumeLayout(false);
@@ -205,5 +218,6 @@
         private ComboBox cbPresion;
         private Label lblPresion;
         private Button btnAgregar;
+        private PictureBox pbArbol;
     }
 }

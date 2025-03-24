@@ -20,5 +20,21 @@ public class NodoPaciente
         }
         return hijo;
     }
-    
+
+    // Verificar si ya existe un paciente para evitar duplicados
+    public bool ExistePaciente(string nombre)
+    {
+        if (Categoria.Equals(nombre, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        foreach (var hijo in Hijos)
+        {
+            if (hijo.ExistePaciente(nombre))
+                return true;
+        }
+
+        return false;
+    }
+
+
 }

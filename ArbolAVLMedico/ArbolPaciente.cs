@@ -9,12 +9,20 @@ public class ArbolPaciente
 	public ArbolPaciente()
 	{
         Raiz = new NodoPaciente("Paciente");
+
+        Raiz.ObtenerOHijoCrear("Género");
+        Raiz.ObtenerOHijoCrear("Sangre");
+        Raiz.ObtenerOHijoCrear("Presión");
     }
 
     // Método para agregar un paciente al árbol
     public void AgregarPaciente(Paciente paciente)
     {
-        // Ramas principales: Género, Sangre, Presión
+        // Verificar si ya existe un paciente, en caso que exista deja de ejecutarse el metodo
+        if (Raiz.ExistePaciente(paciente.Nombre))
+            return;
+
+        // Si no existe, se agrega al árbol
         var nodoGenero = Raiz.ObtenerOHijoCrear("Género").ObtenerOHijoCrear(paciente.Genero);
         nodoGenero.ObtenerOHijoCrear(paciente.Nombre);
 
