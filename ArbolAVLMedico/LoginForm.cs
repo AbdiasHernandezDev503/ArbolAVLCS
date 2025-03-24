@@ -13,7 +13,6 @@ namespace ArbolAVLMedico
     public partial class LoginForm : Form
     {
         private Usuario usuarioValido;
-
         public bool Autenticado { get; set; }
 
         public LoginForm()
@@ -27,7 +26,6 @@ namespace ArbolAVLMedico
 
         private void LoginForm_Load(object sender, EventArgs e)
         {
-            // Puedes dejarlo vacío o poner un mensaje de bienvenida si quieres.
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
