@@ -55,6 +55,12 @@ namespace ArbolAVLMedico
                 Math.Max(0, posicionRaiz.X - panelContenedor.Width / 2),
                 Math.Max(0, posicionRaiz.Y - panelContenedor.Height / 4)
             );
+
+            // Desplaza el scroll horizontal al final si la imagen creció
+            if (pbArbol.Width > panelContenedor.ClientSize.Width)
+            {
+                panelContenedor.HorizontalScroll.Value = panelContenedor.HorizontalScroll.Maximum;
+            }
         }
 
         private void txtNombre_Enter(object sender, EventArgs e)
@@ -193,9 +199,20 @@ namespace ArbolAVLMedico
             foreach (var hijo in nodo.Hijos)
             {
                 Point hijoPunto = posiciones[hijo];
-                g.DrawLine(Pens.Black,
-                    punto.X + rect.Width / 2, punto.Y + rect.Height,
-                    hijoPunto.X + 30, hijoPunto.Y);
+
+                // Centro inferior del nodo padre
+                int padreX = punto.X + rect.Width / 2;
+                int padreY = punto.Y + rect.Height;
+
+                // Calcular tamaño del hijo para conectar al centro exacto
+                SizeF hijoSize = g.MeasureString(hijo.Categoria, font);
+                Rectangle hijoRect = new Rectangle(hijoPunto.X, hijoPunto.Y, (int)hijoSize.Width + 10, 25);
+
+                int hijoX = hijoRect.X + hijoRect.Width / 2;
+                int hijoY = hijoRect.Y;
+
+                g.DrawLine(Pens.Black, padreX, padreY, hijoX, hijoY);
+
                 DibujarArbol(g, hijo);
             }
         }
