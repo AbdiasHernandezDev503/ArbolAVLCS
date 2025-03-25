@@ -31,6 +31,8 @@
             panelContenedor = new Panel();
             pbArbol = new PictureBox();
             panel1 = new Panel();
+            btnSalir = new Button();
+            btnEliminar = new Button();
             btnBuscar = new Button();
             btnAgregar = new Button();
             cbPresion = new ComboBox();
@@ -70,6 +72,8 @@
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.Fixed3D;
+            panel1.Controls.Add(btnSalir);
+            panel1.Controls.Add(btnEliminar);
             panel1.Controls.Add(btnBuscar);
             panel1.Controls.Add(btnAgregar);
             panel1.Controls.Add(cbPresion);
@@ -87,12 +91,34 @@
             panel1.Size = new Size(361, 405);
             panel1.TabIndex = 1;
             // 
+            // btnSalir
+            // 
+            btnSalir.Font = new Font("Arial Narrow", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            btnSalir.Location = new Point(247, 323);
+            btnSalir.Name = "btnSalir";
+            btnSalir.Size = new Size(98, 26);
+            btnSalir.TabIndex = 14;
+            btnSalir.Text = "Salir";
+            btnSalir.UseVisualStyleBackColor = true;
+            btnSalir.Click += btnSalir_Click;
+            // 
+            // btnEliminar
+            // 
+            btnEliminar.Font = new Font("Arial Narrow", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            btnEliminar.Location = new Point(133, 323);
+            btnEliminar.Name = "btnEliminar";
+            btnEliminar.Size = new Size(98, 26);
+            btnEliminar.TabIndex = 13;
+            btnEliminar.Text = "Eliminar";
+            btnEliminar.UseVisualStyleBackColor = true;
+            btnEliminar.Click += btnEliminar_Click;
+            // 
             // btnBuscar
             // 
             btnBuscar.Font = new Font("Arial Narrow", 12F, FontStyle.Regular, GraphicsUnit.Point);
             btnBuscar.Location = new Point(24, 323);
             btnBuscar.Name = "btnBuscar";
-            btnBuscar.Size = new Size(321, 27);
+            btnBuscar.Size = new Size(98, 27);
             btnBuscar.TabIndex = 12;
             btnBuscar.Text = "Buscar";
             btnBuscar.UseVisualStyleBackColor = true;
@@ -242,5 +268,7 @@
         private Button btnAgregar;
         private PictureBox pbArbol;
         private Button btnBuscar;
+        private Button btnSalir;
+        private Button btnEliminar;
     }
 }

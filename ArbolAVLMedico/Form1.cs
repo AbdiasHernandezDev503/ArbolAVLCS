@@ -28,6 +28,9 @@ namespace ArbolAVLMedico
             cbGenero.SelectedIndex = 0;
             cbTipoSangre.SelectedIndex = 0;
             cbPresion.SelectedIndex = 0;
+
+            btnEliminar.Click += btnEliminar_Click;
+            btnSalir.Click += btnSalir_Click;
         }
 
         private void DibujarArbolEnImagen()
@@ -56,7 +59,6 @@ namespace ArbolAVLMedico
                 Math.Max(0, posicionRaiz.Y - panelContenedor.Height / 4)
             );
 
-            // Desplaza el scroll horizontal al final si la imagen creció
             if (pbArbol.Width > panelContenedor.ClientSize.Width)
             {
                 panelContenedor.HorizontalScroll.Value = panelContenedor.HorizontalScroll.Maximum;
@@ -98,7 +100,22 @@ namespace ArbolAVLMedico
                 return;
             }
 
-            AgregarPacienteDesdeFormulario(genero, sangre, presion, nombre);
+            if (arbol.Raiz.ExistePaciente(nombre))
+            {
+                MessageBox.Show("Ese paciente ya ha sido registrado.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Paciente paciente = new Paciente
+            {
+                Nombre = nombre,
+                Genero = genero,
+                TipoSangre = sangre,
+                Presion = presion
+            };
+
+            arbol.AgregarPaciente(paciente);
+            DibujarArbolEnImagen();
 
             txtNombre.Clear();
             cbGenero.SelectedIndex = -1;
@@ -126,6 +143,27 @@ namespace ArbolAVLMedico
             DibujarArbolEnImagen();
         }
 
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            string nombreEliminar = txtNombre.Text.Trim();
+            if (string.IsNullOrEmpty(nombreEliminar))
+            {
+                MessageBox.Show("Ingrese un nombre para eliminar.");
+                return;
+            }
+
+            EliminarPacientesPorNombre(arbol.Raiz, nombreEliminar);
+            MessageBox.Show("Eliminación completada.");
+
+            nodosResaltados.Clear();
+            DibujarArbolEnImagen();
+        }
+
+        private void btnSalir_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
         private void BuscarTodosLosPacientes(NodoPaciente nodo, string nombre)
         {
             if (nodo == null) return;
@@ -138,6 +176,18 @@ namespace ArbolAVLMedico
             foreach (var hijo in nodo.Hijos)
             {
                 BuscarTodosLosPacientes(hijo, nombre);
+            }
+        }
+
+        private void EliminarPacientesPorNombre(NodoPaciente nodo, string nombre)
+        {
+            if (nodo == null) return;
+
+            nodo.Hijos.RemoveAll(h => h.Categoria.Equals(nombre, StringComparison.OrdinalIgnoreCase));
+
+            foreach (var hijo in nodo.Hijos)
+            {
+                EliminarPacientesPorNombre(hijo, nombre);
             }
         }
 
@@ -203,7 +253,6 @@ namespace ArbolAVLMedico
                 int padreX = punto.X + rect.Width / 2;
                 int padreY = punto.Y + rect.Height;
 
-                // Calcular tamaño del hijo para conectar al centro exacto
                 SizeF hijoSize = g.MeasureString(hijo.Categoria, font);
                 Rectangle hijoRect = new Rectangle(hijoPunto.X, hijoPunto.Y, (int)hijoSize.Width + 10, 25);
 
