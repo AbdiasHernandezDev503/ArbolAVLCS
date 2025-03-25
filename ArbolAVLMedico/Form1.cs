@@ -58,37 +58,53 @@
         {
             boton.FlatStyle = FlatStyle.Flat;
             boton.FlatAppearance.BorderSize = 0;
-            boton.ForeColor = Color.White;
+            boton.ForeColor = Color.Black;
+            boton.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            boton.Cursor = Cursors.Hand;
+            boton.Height = 35;
+
+            Color backColor, hoverColor;
 
             switch (tipo.ToLower())
             {
                 case "agregar":
-                    boton.BackColor = Color.FromArgb(72, 201, 176); // Verde
-                    boton.FlatAppearance.MouseOverBackColor = Color.FromArgb(62, 180, 157);
+                    backColor = ColorTranslator.FromHtml("#A9DFBF");   // Verde suave
+                    hoverColor = ColorTranslator.FromHtml("#7DCEA0");  // Verde medio
                     break;
-
                 case "buscar":
-                    boton.BackColor = Color.FromArgb(93, 173, 226); // Azul
-                    boton.FlatAppearance.MouseOverBackColor = Color.FromArgb(84, 153, 199);
+                    backColor = ColorTranslator.FromHtml("#AED6F1");   // Azul suave
+                    hoverColor = ColorTranslator.FromHtml("#85C1E9");  // Azul medio
                     break;
-
                 case "eliminar":
-                    boton.BackColor = Color.FromArgb(231, 76, 60); // Rojo
-                    boton.FlatAppearance.MouseOverBackColor = Color.FromArgb(192, 57, 43);
+                    backColor = ColorTranslator.FromHtml("#F5B7B1");   // Rojo suave
+                    hoverColor = ColorTranslator.FromHtml("#EC7063");  // Rojo medio
                     break;
-
                 case "salir":
-                    boton.BackColor = Color.FromArgb(149, 165, 166); // Gris oscuro
-                    boton.FlatAppearance.MouseOverBackColor = Color.FromArgb(127, 140, 141);
+                    backColor = ColorTranslator.FromHtml("#D5DBDB");   // Gris claro
+                    hoverColor = ColorTranslator.FromHtml("#BFC9CA");  // Gris medio
                     break;
-
                 default:
-                    // Color neutro si no se reconoce tipo
-                    boton.BackColor = Color.Gray;
-                    boton.FlatAppearance.MouseOverBackColor = Color.DarkGray;
+                    backColor = Color.LightGray;
+                    hoverColor = Color.Gray;
                     break;
             }
+
+            boton.BackColor = backColor;
+            boton.FlatAppearance.MouseOverBackColor = hoverColor;
+
+            boton.MouseEnter += (s, e) =>
+            {
+                boton.FlatAppearance.BorderSize = 1;
+                boton.FlatAppearance.BorderColor = Color.DarkGray;
+            };
+
+            boton.MouseLeave += (s, e) =>
+            {
+                boton.FlatAppearance.BorderSize = 0;
+            };
         }
+
+
 
         private void DibujarArbolEnImagen()
         {
@@ -275,11 +291,10 @@
         {
             string[] valoresPermitidos =
             {
-        "FEMENINO", "MASCULINO",
-        "A", "B", "AB", "O",
-        "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-",
-        "ALTA", "MEDIA", "BAJA"
-    };
+                "FEMENINO", "MASCULINO",
+                "A", "B", "AB", "O",
+                "ALTA", "MEDIA", "BAJA"
+            };
 
             return valoresPermitidos.Contains(nodo.Categoria.ToUpper());
         }
