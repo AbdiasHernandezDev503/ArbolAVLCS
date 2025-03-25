@@ -1,4 +1,4 @@
-namespace ArbolAVLMedico
+﻿namespace ArbolAVLMedico
 {
     public partial class Form1 : Form
     {
@@ -17,20 +17,77 @@ namespace ArbolAVLMedico
 
             arbol = new ArbolPaciente();
 
-            lblNombre.Font = new Font("Arial", 12);
-            lblGenero.Font = new Font("Arial", 12);
-            lblGenero.ForeColor = Color.Blue;
-            lblTipoSangre.Font = new Font("Arial", 12);
-            lblTipoSangre.ForeColor = Color.Blue;
-            lblPresion.Font = new Font("Arial", 12);
-            lblPresion.ForeColor = Color.Blue;
+            this.BackColor = Color.FromArgb(242, 242, 242); // Fondo general
+
+            panelContenedor.BackColor = Color.White;
+            panelContenedor.BorderStyle = BorderStyle.FixedSingle;
+
+            lblNombre.Font = new Font("Segoe UI", 12);
+            lblGenero.Font = new Font("Segoe UI", 12);
+            lblTipoSangre.Font = new Font("Segoe UI", 12);
+            lblPresion.Font = new Font("Segoe UI", 12);
+
+            lblNombre.ForeColor = Color.FromArgb(33, 37, 41);
+            lblGenero.ForeColor = Color.FromArgb(33, 37, 41);
+            lblTipoSangre.ForeColor = Color.FromArgb(33, 37, 41);
+            lblPresion.ForeColor = Color.FromArgb(33, 37, 41);
+
+            txtNombre.BackColor = Color.FromArgb(245, 245, 245);
+            txtNombre.BorderStyle = BorderStyle.FixedSingle;
+
+            cbGenero.BackColor = Color.FromArgb(245, 245, 245);
+            cbGenero.FlatStyle = FlatStyle.Flat;
+
+            cbTipoSangre.BackColor = Color.FromArgb(245, 245, 245);
+            cbTipoSangre.FlatStyle = FlatStyle.Flat;
+
+            cbPresion.BackColor = Color.FromArgb(245, 245, 245);
+            cbPresion.FlatStyle = FlatStyle.Flat;
+
+            EstilizarBoton(btnAgregar, "agregar");
+            EstilizarBoton(btnBuscar, "buscar");
+            EstilizarBoton(btnEliminar, "eliminar");
+            EstilizarBoton(btnSalir, "salir");
 
             cbGenero.SelectedIndex = 0;
             cbTipoSangre.SelectedIndex = 0;
             cbPresion.SelectedIndex = 0;
+        }
 
-            btnEliminar.Click += btnEliminar_Click;
-            btnSalir.Click += btnSalir_Click;
+        private void EstilizarBoton(Button boton, string tipo)
+        {
+            boton.FlatStyle = FlatStyle.Flat;
+            boton.FlatAppearance.BorderSize = 0;
+            boton.ForeColor = Color.White;
+
+            switch (tipo.ToLower())
+            {
+                case "agregar":
+                    boton.BackColor = Color.FromArgb(72, 201, 176); // Verde
+                    boton.FlatAppearance.MouseOverBackColor = Color.FromArgb(62, 180, 157);
+                    break;
+
+                case "buscar":
+                    boton.BackColor = Color.FromArgb(93, 173, 226); // Azul
+                    boton.FlatAppearance.MouseOverBackColor = Color.FromArgb(84, 153, 199);
+                    break;
+
+                case "eliminar":
+                    boton.BackColor = Color.FromArgb(231, 76, 60); // Rojo
+                    boton.FlatAppearance.MouseOverBackColor = Color.FromArgb(192, 57, 43);
+                    break;
+
+                case "salir":
+                    boton.BackColor = Color.FromArgb(149, 165, 166); // Gris oscuro
+                    boton.FlatAppearance.MouseOverBackColor = Color.FromArgb(127, 140, 141);
+                    break;
+
+                default:
+                    // Color neutro si no se reconoce tipo
+                    boton.BackColor = Color.Gray;
+                    boton.FlatAppearance.MouseOverBackColor = Color.DarkGray;
+                    break;
+            }
         }
 
         private void DibujarArbolEnImagen()
@@ -100,22 +157,7 @@ namespace ArbolAVLMedico
                 return;
             }
 
-            if (arbol.Raiz.ExistePaciente(nombre))
-            {
-                MessageBox.Show("Ese paciente ya ha sido registrado.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            Paciente paciente = new Paciente
-            {
-                Nombre = nombre,
-                Genero = genero,
-                TipoSangre = sangre,
-                Presion = presion
-            };
-
-            arbol.AgregarPaciente(paciente);
-            DibujarArbolEnImagen();
+            AgregarPacienteDesdeFormulario(nombre, genero, sangre, presion);
 
             txtNombre.Clear();
             cbGenero.SelectedIndex = -1;
@@ -153,7 +195,7 @@ namespace ArbolAVLMedico
             }
 
             EliminarPacientesPorNombre(arbol.Raiz, nombreEliminar);
-            MessageBox.Show("Eliminaci�n completada.");
+            MessageBox.Show("Eliminación completada.");
 
             nodosResaltados.Clear();
             DibujarArbolEnImagen();
@@ -161,7 +203,7 @@ namespace ArbolAVLMedico
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            this.Close();
         }
 
         private void BuscarTodosLosPacientes(NodoPaciente nodo, string nombre)
@@ -179,17 +221,69 @@ namespace ArbolAVLMedico
             }
         }
 
-        private void EliminarPacientesPorNombre(NodoPaciente nodo, string nombre)
+        private bool EliminarPacientesPorNombre(NodoPaciente nodo, string nombre)
         {
-            if (nodo == null) return;
+            if (nodo == null) return false;
 
-            nodo.Hijos.RemoveAll(h => h.Categoria.Equals(nombre, StringComparison.OrdinalIgnoreCase));
+            bool eliminado = false;
 
-            foreach (var hijo in nodo.Hijos)
+            for (int i = nodo.Hijos.Count - 1; i >= 0; i--)
             {
-                EliminarPacientesPorNombre(hijo, nombre);
+                var hijo = nodo.Hijos[i];
+
+                // Si el hijo es el paciente
+                if (hijo.Categoria.Equals(nombre, StringComparison.OrdinalIgnoreCase))
+                {
+                    nodo.Hijos.RemoveAt(i);
+                    eliminado = true;
+                    continue;
+                }
+
+                // Recorremos hijos recursivamente
+                bool hijoEliminado = EliminarPacientesPorNombre(hijo, nombre);
+                if (hijoEliminado)
+                {
+                    // Si después de eliminar, el hijo quedó vacío y no es categoría base ni valor permitido, lo eliminamos
+                    if (hijo.Hijos.Count == 0 && !EsCategoriaBase(hijo.Categoria) && !EsValorDeCategoria(hijo))
+                    {
+                        nodo.Hijos.RemoveAt(i);
+                    }
+                    eliminado = true;
+                }
+
+                if (!EsCategoriaBase(hijo.Categoria) && EsValorDeCategoria(hijo))
+                {
+                    if (hijo.Hijos.Count == 0)
+                    {
+                        // MessageBox.Show($"El nodo {hijo.Categoria} ya no tiene hijos y será eliminado.");
+                        nodo.Hijos.RemoveAt(i);
+                    }
+                }
             }
+
+            return eliminado;
         }
+
+        private bool EsCategoriaBase(string categoria)
+        {
+            return categoria.Equals("Género", StringComparison.OrdinalIgnoreCase)
+                || categoria.Equals("Sangre", StringComparison.OrdinalIgnoreCase)
+                || categoria.Equals("Presión", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private bool EsValorDeCategoria(NodoPaciente nodo)
+        {
+            string[] valoresPermitidos =
+            {
+        "FEMENINO", "MASCULINO",
+        "A", "B", "AB", "O",
+        "A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-",
+        "ALTA", "MEDIA", "BAJA"
+    };
+
+            return valoresPermitidos.Contains(nodo.Categoria.ToUpper());
+        }
+
 
         private void CalcularPosiciones(NodoPaciente nodo, int nivel)
         {
@@ -241,6 +335,21 @@ namespace ArbolAVLMedico
                 fondo = Brushes.Yellow;
                 borde = Pens.Red;
             }
+            else if (EsCategoriaBase(nodo.Categoria))
+            {
+                fondo = Brushes.LightSteelBlue;  // Género, Sangre, Presión
+                borde = Pens.SteelBlue;
+            }
+            else if (EsValorDeCategoria(nodo))
+            {
+                fondo = Brushes.Honeydew; // MASCULINO, O, Alta, etc.
+                borde = Pens.Green;
+            }
+            else
+            {
+                fondo = Brushes.LightSalmon; // Pacientes
+                borde = Pens.DarkRed;
+            }
 
             g.FillEllipse(fondo, rect);
             g.DrawEllipse(borde, rect);
@@ -264,5 +373,24 @@ namespace ArbolAVLMedico
                 DibujarArbol(g, hijo);
             }
         }
+
+        private void AgregarPacienteDesdeFormulario(string nombre, string genero, string sangre, string presion)
+        {
+            // Validar si el paciente ya existe en el arbol
+            if (arbol.Raiz.ExistePaciente(nombre))
+            {
+                MessageBox.Show("Ese paciente ya ha sido registrado.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Paciente paciente = new Paciente();
+            paciente.Nombre = nombre;
+            paciente.Genero = genero;
+            paciente.TipoSangre = sangre;
+            paciente.Presion = presion;
+
+            arbol.AgregarPaciente(paciente);
+            DibujarArbolEnImagen();
+        }   
     }
 }
