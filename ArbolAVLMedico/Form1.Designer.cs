@@ -28,9 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             panelContenedor = new Panel();
             pbArbol = new PictureBox();
             panel1 = new Panel();
+            btnAnalisis = new Button();
+            btnExportar = new Button();
             btnSalir = new Button();
             btnEliminar = new Button();
             btnBuscar = new Button();
@@ -44,6 +47,7 @@
             lblNombre = new Label();
             txtNombre = new TextBox();
             lblDatos = new Label();
+            toolTipBtn = new ToolTip(components);
             panelContenedor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbArbol).BeginInit();
             panel1.SuspendLayout();
@@ -70,6 +74,8 @@
             // panel1
             // 
             panel1.BorderStyle = BorderStyle.Fixed3D;
+            panel1.Controls.Add(btnAnalisis);
+            panel1.Controls.Add(btnExportar);
             panel1.Controls.Add(btnSalir);
             panel1.Controls.Add(btnEliminar);
             panel1.Controls.Add(btnBuscar);
@@ -85,16 +91,38 @@
             panel1.Controls.Add(lblDatos);
             panel1.Location = new Point(1109, 12);
             panel1.Name = "panel1";
-            panel1.Size = new Size(412, 539);
+            panel1.Size = new Size(412, 620);
             panel1.TabIndex = 1;
+            // 
+            // btnAnalisis
+            // 
+            btnAnalisis.Cursor = Cursors.Hand;
+            btnAnalisis.Location = new Point(263, 431);
+            btnAnalisis.Name = "btnAnalisis";
+            btnAnalisis.Size = new Size(140, 35);
+            btnAnalisis.TabIndex = 16;
+            btnAnalisis.Text = "Análisis";
+            btnAnalisis.UseVisualStyleBackColor = true;
+            btnAnalisis.Click += btnAnalisis_Click;
+            // 
+            // btnExportar
+            // 
+            btnExportar.Cursor = Cursors.Hand;
+            btnExportar.Location = new Point(27, 483);
+            btnExportar.Name = "btnExportar";
+            btnExportar.Size = new Size(376, 38);
+            btnExportar.TabIndex = 15;
+            btnExportar.Text = "Exportar como PNG";
+            btnExportar.UseVisualStyleBackColor = true;
+            btnExportar.Click += btnExportar_Click;
             // 
             // btnSalir
             // 
             btnSalir.Font = new Font("Arial Narrow", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnSalir.Location = new Point(282, 431);
+            btnSalir.Location = new Point(25, 540);
             btnSalir.Margin = new Padding(3, 4, 3, 4);
             btnSalir.Name = "btnSalir";
-            btnSalir.Size = new Size(112, 35);
+            btnSalir.Size = new Size(378, 35);
             btnSalir.TabIndex = 14;
             btnSalir.Text = "Salir";
             btnSalir.UseVisualStyleBackColor = true;
@@ -103,7 +131,7 @@
             // btnEliminar
             // 
             btnEliminar.Font = new Font("Arial Narrow", 12F, FontStyle.Regular, GraphicsUnit.Point);
-            btnEliminar.Location = new Point(152, 431);
+            btnEliminar.Location = new Point(145, 431);
             btnEliminar.Margin = new Padding(3, 4, 3, 4);
             btnEliminar.Name = "btnEliminar";
             btnEliminar.Size = new Size(112, 35);
@@ -265,5 +293,8 @@
         private Button btnBuscar;
         private Button btnSalir;
         private Button btnEliminar;
+        private Button btnExportar;
+        private Button btnAnalisis;
+        private ToolTip toolTipBtn;
     }
 }

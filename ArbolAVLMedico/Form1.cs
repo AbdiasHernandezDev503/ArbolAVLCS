@@ -48,10 +48,27 @@
             EstilizarBoton(btnBuscar, "buscar");
             EstilizarBoton(btnEliminar, "eliminar");
             EstilizarBoton(btnSalir, "salir");
+            EstilizarBoton(btnExportar, "agregar");  // Seteamos el mismo estilo que el botón de agregar
+            EstilizarBoton(btnAnalisis, "salir");  // Seteamos el mismo estilo que el botón de salir
+
+            // Agregar tooltip a los botones informativos para saber que hace cada uno
+            toolTipBtn.SetToolTip(btnAgregar, "Agregar nuevo paciente al árbol");
+            toolTipBtn.SetToolTip(btnBuscar, "Buscar paciente por nombre");
+            toolTipBtn.SetToolTip(btnEliminar, "Eliminar paciente por nombre");
+            toolTipBtn.SetToolTip(btnSalir, "Cerrar la aplicación");
+            toolTipBtn.SetToolTip(btnExportar, "Exportar el árbol como imagen PNG");
+            toolTipBtn.SetToolTip(btnAnalisis, "Analizar pacientes según filtros seleccionados");
+
+            toolTipBtn.AutoPopDelay = 5000;
+            toolTipBtn.InitialDelay = 500;
+            toolTipBtn.ReshowDelay = 100;
+            toolTipBtn.ShowAlways = true;
 
             cbGenero.SelectedIndex = 0;
             cbTipoSangre.SelectedIndex = 0;
             cbPresion.SelectedIndex = 0;
+
+            btnExportar.Visible = false;
         }
 
         private void EstilizarBoton(Button boton, string tipo)
@@ -175,6 +192,8 @@
 
             AgregarPacienteDesdeFormulario(nombre, genero, sangre, presion);
 
+            btnExportar.Visible = true;
+
             txtNombre.Clear();
             cbGenero.SelectedIndex = -1;
             cbTipoSangre.SelectedIndex = -1;
@@ -220,6 +239,50 @@
         private void btnSalir_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void btnExportar_Click(object sender, EventArgs e)
+        {
+            ExportarArbolComoImagen();
+        }
+
+        private void btnAnalisis_Click(object sender, EventArgs e)
+        {
+            string genero = cbGenero.SelectedItem?.ToString();
+            string sangre = cbTipoSangre.SelectedItem?.ToString();
+            string presion = cbPresion.SelectedItem?.ToString();
+
+            if (string.IsNullOrEmpty(genero) || string.IsNullOrEmpty(sangre) || string.IsNullOrEmpty(presion))
+            {
+                MessageBox.Show("Por favor selecciona todos los filtros antes de analizar.", "Filtros incompletos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var pacientes = BuscarPacientesEspecificos(genero, sangre, presion);
+            MarcarPacientesResaltados(genero, sangre, presion);
+            DibujarArbolEnImagen();
+
+            if (pacientes.Count > 0)
+            {
+                string mensaje = $"Se encontraron {pacientes.Count} paciente(s) con:\n\n" +
+                                 $"📍 Género: {genero}\n🩸 Sangre: {sangre}\n📈 Presión: {presion}\n\n" +
+                                 $"Nombres: {string.Join(", ", pacientes)}";
+
+                if (presion.Equals("ALTA", StringComparison.OrdinalIgnoreCase))
+                {
+                    mensaje += "\n\n⚠️ Este grupo está en posible riesgo de enfermedades cardiovasculares.";
+                }
+
+                MessageBox.Show(mensaje, "Análisis de pacientes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("No se encontraron pacientes con esos filtros.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+
+            cbGenero.SelectedIndex = -1;
+            cbTipoSangre.SelectedIndex = -1;
+            cbPresion.SelectedIndex = -1;
         }
 
         private void BuscarTodosLosPacientes(NodoPaciente nodo, string nombre)
@@ -406,6 +469,78 @@
 
             arbol.AgregarPaciente(paciente);
             DibujarArbolEnImagen();
-        }   
+        }
+
+        private void ExportarArbolComoImagen()
+        {
+            if (pbArbol.Image != null)
+            {
+                using (SaveFileDialog sfd = new SaveFileDialog())
+                {
+                    sfd.Filter = "Archivo PNG (*.png)|*.png";
+                    sfd.Title = "Guardar árbol como imagen";
+                    sfd.FileName = "ArbolPacientes.png";
+
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        pbArbol.Image.Save(sfd.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                        MessageBox.Show("Árbol exportado exitosamente!!", "Exportación completada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("No hay imagen que exportar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private List<string> BuscarPacientesEspecificos(string genero, string tipoSangre, string presion)
+        {
+            List<string> encontrados = new List<string>();
+
+            var nodoGenero = arbol.Raiz.Hijos.FirstOrDefault(n => n.Categoria == "Género")?
+                .Hijos.FirstOrDefault(h => h.Categoria.Equals(genero, StringComparison.OrdinalIgnoreCase));
+
+            var nodoSangre = arbol.Raiz.Hijos.FirstOrDefault(n => n.Categoria == "Sangre")?
+                .Hijos.FirstOrDefault(h => h.Categoria.Equals(tipoSangre, StringComparison.OrdinalIgnoreCase));
+
+            var nodoPresion = arbol.Raiz.Hijos.FirstOrDefault(n => n.Categoria == "Presión")?
+                .Hijos.FirstOrDefault(h => h.Categoria.Equals(presion, StringComparison.OrdinalIgnoreCase));
+
+            if (nodoGenero != null && nodoSangre != null && nodoPresion != null)
+            {
+                var enGenero = nodoGenero.Hijos.Select(p => p.Categoria).ToList();
+                var enSangre = nodoSangre.Hijos.Select(p => p.Categoria).ToList();
+                var enPresion = nodoPresion.Hijos.Select(p => p.Categoria).ToList();
+
+                encontrados = enGenero.Intersect(enSangre).Intersect(enPresion).ToList();
+            }
+
+            return encontrados;
+        }
+
+        private void MarcarPacientesResaltados(string genero, string sangre, string presion)
+        {
+            nodosResaltados.Clear();
+
+            var nombres = BuscarPacientesEspecificos(genero, sangre, presion);
+
+            // Recorre todo el árbol para encontrar los nodos que coinciden
+            void BuscarYMarcar(NodoPaciente nodo)
+            {
+                if (nombres.Contains(nodo.Categoria, StringComparer.OrdinalIgnoreCase))
+                {
+                    nodosResaltados.Add(nodo);
+                }
+
+                foreach (var hijo in nodo.Hijos)
+                {
+                    BuscarYMarcar(hijo);
+                }
+            }
+
+            BuscarYMarcar(arbol.Raiz);
+        }
+
     }
 }
