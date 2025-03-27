@@ -1,4 +1,6 @@
-﻿namespace ArbolAVLMedico
+﻿using System.Drawing.Printing;
+
+namespace ArbolAVLMedico
 {
     public partial class Form1 : Form
     {
@@ -10,6 +12,8 @@
         int nivelMax = 0;
         private Point posicionRaiz;
         private List<NodoPaciente> nodosResaltados = new List<NodoPaciente>();
+        private string contenidoParaImprimir = "";
+        private string rutaPDF = "";
 
         public Form1()
         {
@@ -268,21 +272,158 @@
                                  $"📍 Género: {genero}\n🩸 Sangre: {sangre}\n📈 Presión: {presion}\n\n" +
                                  $"Nombres: {string.Join(", ", pacientes)}";
 
-                if (presion.Equals("ALTA", StringComparison.OrdinalIgnoreCase))
+                // Solo agregar este enunciado si la presión NO es MEDIA o NORMAL
+                if (!presion.Equals("MEDIA", StringComparison.OrdinalIgnoreCase))
                 {
-                    mensaje += "\n\n⚠️ Este grupo está en posible riesgo de enfermedades cardiovasculares.";
+                    mensaje += "\n\n⚠️ Este grupo está en posible riesgo de:\n\n";
+                }
+
+                // Riesgos combinados según tipo de sangre y presión
+                if (sangre.Equals("A", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (presion.Equals("ALTA", StringComparison.OrdinalIgnoreCase))
+                    {
+                        mensaje += " ❤️  Riesgo elevado de infarto\n" +
+                                   " 🧠 ACV (derrame cerebral)\n" +
+                                   " 🫀  Insuficiencia cardíaca.";
+                    }
+                    else if (presion.Equals("BAJA", StringComparison.OrdinalIgnoreCase))
+                    {
+                        mensaje += " 😵 Mareos, debilidad y desmayos\n" +
+                                   " ☣️ Riesgo de shock si hay coagulopatías";
+                    }
+                    else
+                    {
+                        mensaje += "\n\n 🩺  Recomendación:\n" +
+                                   " 🩺  Chequeos regulares\n" +
+                                   " 🥗 Dieta balanceada";
+
+                    }
+                }
+                else if (sangre.Equals("B", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (presion.Equals("ALTA", StringComparison.OrdinalIgnoreCase))
+                    {
+                        mensaje += " 🍬 Riesgo de diabetes tipo 2\n" +
+                                   " 🧬 Daño renal ";
+                    }
+                    else if (presion.Equals("BAJA", StringComparison.OrdinalIgnoreCase))
+                    {
+                        mensaje += " 🤕 Dolores de cabeza\n" +
+                                   " 🪫 Fatiga frecuente";
+                    }
+                    else
+                    {
+                        mensaje += "\n\n 🩺  Recomendación:\n" +
+                                   " 🧪 Control glucémico\n" +
+                                   " 🏃 Actividad física recomendada";
+                    }
+                }
+                else if (sangre.Equals("AB", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (presion.Equals("ALTA", StringComparison.OrdinalIgnoreCase))
+                    {
+                        mensaje += " 🧠 Riesgo alto de deterioro cognitivo\n" +
+                                   " 🧓 Posible demencia vascular";
+                    }
+                    else if (presion.Equals("BAJA", StringComparison.OrdinalIgnoreCase))
+                    {
+                        mensaje += " 😴 Dificultad para concentrarse o dormir\n" +
+                                   " 🤸‍♂️ Inestabilidad física";
+                    }
+                    else
+                    {
+                        mensaje += "\n\n 🩺  Recomendación:\n" +
+                                   " 🌿 Estilo de vida activo recomendado\n" +
+                                   " 🧠 Control neurocognitivo";
+                    }
+                }
+                else if (sangre.Equals("O", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (presion.Equals("ALTA", StringComparison.OrdinalIgnoreCase))
+                    {
+                        mensaje += " 💥 Riesgo de sangrado cerebral si hay debilidad vascular";
+                    }
+                    else if (presion.Equals("BAJA", StringComparison.OrdinalIgnoreCase))
+                    {
+                        mensaje += " 🩸 Riesgo de anemia\n" +
+                                   " 🪫 Fatiga";
+                    }
+                    else
+                    {
+                        mensaje += "\n\n 🩺  Recomendación:\n" +
+                                   " 🧻 Prevención digestiva\n" +
+                                   " 🩸 Control de hierro";
+                    }
                 }
 
                 MessageBox.Show(mensaje, "Análisis de pacientes", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
+                if (presion.Equals("ALTA", StringComparison.OrdinalIgnoreCase))
+                {
+                    ImprimirComoPDF(mensaje);
+                }
+
             }
             else
             {
                 MessageBox.Show("No se encontraron pacientes con esos filtros.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
+
             cbGenero.SelectedIndex = -1;
             cbTipoSangre.SelectedIndex = -1;
             cbPresion.SelectedIndex = -1;
+        }
+
+        private void ImprimirComoPDF(string contenido)
+        {
+            contenidoParaImprimir = contenido;
+
+            using (SaveFileDialog sfd = new SaveFileDialog())
+            {
+                sfd.Filter = "PDF files (*.pdf)|*.pdf";
+                sfd.Title = "Guardar análisis como PDF";
+                sfd.FileName = "Reporte_Pacientes_Presion_Alta.pdf";
+
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    rutaPDF = sfd.FileName;
+
+                    PrintDocument pd = new PrintDocument();
+                    pd.PrintPage += new PrintPageEventHandler(PrintPage);
+                    pd.PrinterSettings.PrinterName = "Microsoft Print to PDF";
+                    pd.PrinterSettings.PrintToFile = true;
+                    pd.PrinterSettings.PrintFileName = rutaPDF;
+
+                    try
+                    {
+                        pd.Print();
+                        MessageBox.Show("📄 PDF generado correctamente en:\n" + rutaPDF, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al generar el PDF:\n" + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void PrintPage(object sender, PrintPageEventArgs e)
+        {
+            Font font = new Font("Segoe UI Emoji", 12);
+            float y = e.MarginBounds.Top;
+            int saltoLinea = 25;
+
+            using (StringReader sr = new StringReader(contenidoParaImprimir))
+            {
+                string linea;
+                while ((linea = sr.ReadLine()) != null)
+                {
+                    e.Graphics.DrawString(linea, font, Brushes.Black, e.MarginBounds.Left, y);
+                    y += saltoLinea;
+                }
+            }
         }
 
         private void BuscarTodosLosPacientes(NodoPaciente nodo, string nombre)
@@ -470,6 +611,7 @@
             arbol.AgregarPaciente(paciente);
             DibujarArbolEnImagen();
         }
+
 
         private void ExportarArbolComoImagen()
         {
