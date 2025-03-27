@@ -272,7 +272,7 @@ namespace ArbolAVLMedico
                                  $"📍 Género: {genero}\n🩸 Sangre: {sangre}\n📈 Presión: {presion}\n\n" +
                                  $"Nombres: {string.Join(", ", pacientes)}";
 
-                // Solo agregar este enunciado si la presión NO es MEDIA o NORMAL
+                // Mensaje si la presión NO es MEDIA o NORMAL
                 if (!presion.Equals("MEDIA", StringComparison.OrdinalIgnoreCase))
                 {
                     mensaje += "\n\n⚠️ Este grupo está en posible riesgo de:\n\n";
@@ -361,7 +361,18 @@ namespace ArbolAVLMedico
                 
                 if (presion.Equals("ALTA", StringComparison.OrdinalIgnoreCase))
                 {
-                    ImprimirComoPDF(mensaje);
+                    DialogResult respuesta = MessageBox.Show(
+                        "¿Deseas descargar un reporte de los pacientes con posibles riesgos de salud?",
+                        "Generar reporte PDF",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question
+                    );
+
+                    if (respuesta == DialogResult.Yes)
+                    {
+                        // Ejecutar método para imprimir el contenido en un PDF
+                        ImprimirComoPDF(mensaje);
+                    }
                 }
 
             }
